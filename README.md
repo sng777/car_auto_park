@@ -11,6 +11,9 @@ React TypeScript, implementing car auto parking functionality involves creating 
 ## Usage
 To start using the project, run `yarn start` and open your browser to the specified localhost address.
 
+## Demo
+You can view a live demo of the project at [Demo Link](https://sng777.github.io/car_auto_park).
+
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request to contribute to this project.
 
