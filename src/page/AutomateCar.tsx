@@ -1,16 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ModalComponent, { ModalForm } from "../components/Modal";
-
-interface CarProps {
-  name?: string;
-  img?: string;
-}
-
-interface Message {
-  title: string;
-  message: string;
-}
+import ModalComponent, { MessageProps, ModalForm } from "../components/Modal";
+import { CarProps, OnAddingCar, OnInsertCar } from "../utils";
 
 const Component = styled.div`
   display: grid;
@@ -20,10 +11,10 @@ const Component = styled.div`
   justify-items: center;
 `;
 
-const Row = styled.div<{ $row: number }>`
+const Columns = styled.div<{ $column: number }>`
   width: max-content;
   display: grid;
-  grid-template-columns: ${({ $row }) => `repeat(${$row}, 1fr)`};
+  grid-template-columns: ${({ $column }) => `repeat(${$column}, 1fr)`};
   gap: 10px;
 
   & > .title {
@@ -39,7 +30,7 @@ const MainText = styled.p`
   font-weight: 800;
 `;
 
-const Title = styled(MainText)`
+const HeadTitle = styled(MainText)`
   text-align: center;
 `;
 
@@ -74,77 +65,54 @@ export const Input = styled.input`
   }
 `;
 
-const AutomatedCarParkingStation: React.FC = () => {
-  const row = 4;
-  const count: number = 12;
-  const parkSpace: CarProps[] = Array.from(
-    { length: (row + count) * 2 },
-    (_) => ({
-      name: undefined,
-      img: undefined,
-    })
-  );
+const AutomatedCarParkingSystems: React.FC = () => {
+  const parkSpaceAvailable: CarProps[] = Array.from({ length: 32 }, (_) => ({
+    name: undefined,
+    img: undefined,
+  }));
 
-  const [data, setData] = useState(parkSpace || []);
-  const [message, setMessage] = useState<Message | undefined>();
+  const [parkData, setParkData] = useState(parkSpaceAvailable || []);
+  const [message, setMessage] = useState<MessageProps | undefined>();
   const [open, setOpen] = useState(false);
 
-  const OnInsertAdd = (
-    arr: any[],
-    startIndex: number,
-    index: number,
-    newItem: any[],
-    fristPark: boolean
-  ) => {
-    const result = fristPark
-      ? [
-          ...arr.slice(startIndex, index), // part of the array before the specified index
-          ...newItem.map((item) => item), // increment the values of the inserted items
-          ...arr.slice(index),
-        ]
-      : [
-          ...arr.slice(0, startIndex),
-          ...newItem.map((item) => item), // increment the values of the inserted items
-          ...arr.slice(startIndex, index - 1), // part of the array before the specified index
-          ...arr.slice(index, arr.length),
-        ];
-    return result;
-  };
+  const handleParkingSlot = (no?: string) => {
+    const parkingLot1 = parkData.slice(0, 4);
+    const parkingLot2 = parkData.slice(16, 20);
+    let firstIndex = 1;
+    let lastIndex = 4;
+    let parkLot = parkingLot1;
 
-  const handlePark = (no?: string) => {
-    const parkLot1 = data.slice(0, 4);
-    const parkLot2 = data.slice(16, 20);
-    let startIndex = 1;
-    let endIndex = 4;
-    let parkLot = parkLot1;
     if (
-      parkLot1.filter((item) => item.name).length >
-      parkLot2.filter((item) => item.name).length
+      parkingLot1.filter((item) => item.name).length >
+      parkingLot2.filter((item) => item.name).length
     ) {
-      parkLot = parkLot2;
-      startIndex = 16;
-      endIndex = 20;
+      parkLot = parkingLot2;
+      firstIndex = 16;
+      lastIndex = 20;
     }
 
     if (
       (parkLot.filter((item) => item.name).length >= 1 &&
-        data.slice(4, 8).filter((item) => item.name).length >= 1) ||
+        parkData.slice(4, 8).filter((item) => item.name).length >= 1) ||
       (parkLot.filter((item) => item.name).length >= 1 &&
-        data.slice(20, 24).filter((item) => item.name).length >= 1)
+        parkData.slice(20, 24).filter((item) => item.name).length >= 1)
     ) {
       return setMessage({
-        title: "Warning",
-        message: "Please exist all the car first",
+        header: "Caution",
+        message: "Please leave the all cars!!",
       });
     }
 
-    const checked = parkLot.every((value) => value.name);
-    if (checked) {
-      return setMessage({ title: "Warning", message: "Full space" });
+    const checkSpace = parkLot.every((value) => value.name);
+    if (checkSpace) {
+      return setMessage({
+        header: "Caution",
+        message: "The parking area was filled to fullness.",
+      });
     } else if (!no) {
       return setMessage({
-        title: "Warning",
-        message: "Please input template number",
+        header: "Caution",
+        message: "The car's plate number is a requirement.",
       });
     }
 
@@ -155,92 +123,86 @@ const AutomatedCarParkingStation: React.FC = () => {
       },
     ];
 
-    setData((preData) => {
-      return OnInsertAdd(
+    setParkData((preData) => {
+      return OnAddingCar(
         preData,
-        startIndex,
-        endIndex,
+        firstIndex,
+        lastIndex,
         newData,
-        startIndex === 1 ? true : false
+        firstIndex === 1 ? true : false
       );
     });
   };
 
-  const OnInsert = (arr: any[], index: number, newItem: any[]) => {
-    return [
-      ...arr.slice(0, index),
-      // inserted items
-      ...newItem,
-      // part of the array after the specified index (excluding the replaced item)
-      ...arr.slice(index + newItem?.length),
-    ];
-  };
-  const handleExistPark1 = (item?: CarProps, index?: number) => {
+  const handleExistParkFirstSlot = (item?: CarProps, index?: number) => {
     if (!item?.name || index === undefined) {
       return setMessage({
-        title: "Warning",
-        message: "Don't have car to exist",
+        header: "Caution",
+        message: "It was an empty slot!!",
       });
     } else {
-      let newIndex = 4;
+      let endIndex = 4;
       if (index > 11) {
-        newIndex = 16;
+        endIndex = 16;
       } else if (index > 7) {
-        newIndex = 12;
+        endIndex = 12;
       } else if (index > 3) {
-        newIndex = 8;
+        endIndex = 8;
       }
 
-      const newData = data.map((car, carIndex) => {
-        if (carIndex > index && carIndex < newIndex) {
-          car.name = data[newIndex + index - 4 - carIndex]?.name;
-          car.img = data[newIndex + index - 4 - carIndex]?.img;
+      const newDataParkingSlot = parkData.map((car, carIndex) => {
+        if (carIndex > index && carIndex < endIndex) {
+          car.name = parkData[endIndex + index - 4 - carIndex]?.name;
+          car.img = parkData[endIndex + index - 4 - carIndex]?.img;
         }
         return car;
       });
 
-      const length = Math.max(newIndex - index, 1); // Ensure non-negative length
-      const arrange = parkSpace
+      const length = Math.max(endIndex - index, 1); // Ensure non-negative length
+      const arrange = parkSpaceAvailable
         .slice(0, length)
-        .concat(newData.slice(newIndex - 8, index - 4));
-      setData(OnInsert(newData, newIndex - 8, arrange));
+        .concat(newDataParkingSlot.slice(endIndex - 8, index - 4));
+      setParkData(OnInsertCar(newDataParkingSlot, endIndex - 8, arrange));
       setMessage({
-        title: "Thank you",
-        message: `The car's ${item.name} has been exist`,
+        header: "Come Again",
+        message: `The car's ${item.name} has been departing.`,
       });
     }
   };
 
-  const handleExistPark2 = (item?: CarProps, index?: number) => {
+  const handleExistParkSecondSlot = (item?: CarProps, index?: number) => {
     if (!item?.name || index === undefined) {
       return setMessage({
-        title: "Warning",
-        message: "Don't have car to exist",
+        header: "Caution",
+        message: "It was an empty slot!!",
       });
     } else {
-      let startIndex = 19;
+      let firstIndex = 19;
       if (index >= 28) {
-        startIndex = 27;
+        firstIndex = 27;
       } else if (index >= 24) {
-        startIndex = 23;
+        firstIndex = 23;
       }
 
-      const newData = data.map((car, carIndex) => {
-        if (carIndex > startIndex && carIndex < index) {
-          car.name = data[startIndex + index - (carIndex + 4)]?.name;
-          car.img = data[startIndex + index - (carIndex + 4)]?.img;
+      const newDataParkingSlot = parkData.map((car, carIndex) => {
+        if (carIndex > firstIndex && carIndex < index) {
+          car.name = parkData[firstIndex + index - (carIndex + 4)]?.name;
+          car.img = parkData[firstIndex + index - (carIndex + 4)]?.img;
         }
         return car;
       });
 
-      const length = Math.max(index - startIndex, 1); // Ensure non-negative length
-      const arrange = newData
-        .slice(index - 3, startIndex + 1)
-        .concat(parkSpace.slice(16, length > 4 ? 16 + 4 : 16 + length));
-      setData(OnInsert(newData, startIndex - 3, arrange));
+      const length = Math.max(index - firstIndex, 1); // Ensure non-negative length
+      const arrange = newDataParkingSlot
+        .slice(index - 3, firstIndex + 1)
+        .concat(
+          parkSpaceAvailable.slice(16, length > 4 ? 16 + 4 : 16 + length)
+        );
+
+      setParkData(OnInsertCar(newDataParkingSlot, firstIndex - 3, arrange));
       setMessage({
-        title: "Thank you",
-        message: `The car's ${item.name} has been exist`,
+        header: "Come Again",
+        message: `The car's ${item?.name || ""} has been departing.`,
       });
     }
   };
@@ -251,14 +213,14 @@ const AutomatedCarParkingStation: React.FC = () => {
         <ModalComponent {...message} onClose={() => setMessage(undefined)} />
       )}
       <Component>
-        <Row $row={row}>
-          <Title className="title">Parking lot 1(Exit)</Title>
-          {data &&
-            data.slice(0, 16).map((item, index) => (
+        <Columns $column={4}>
+          <HeadTitle className="title">Parking lot 1(Exit)</HeadTitle>
+          {parkData &&
+            parkData.slice(0, 16).map((item, index) => (
               <div key={index}>
                 <Slot
                   onClick={() => {
-                    handleExistPark1(item, index + 4);
+                    handleExistParkFirstSlot(item, index + 4);
                   }}
                 >
                   <Image
@@ -271,20 +233,20 @@ const AutomatedCarParkingStation: React.FC = () => {
                 </Slot>
               </div>
             ))}
-        </Row>
+        </Columns>
         <AddComponent
           src={"https://cdn-icons-png.flaticon.com/512/63/63747.png"}
           onClick={() => setOpen(true)}
         />
-        <Row $row={row}>
-          <Title className="title">Parking lot 2(Exit)</Title>
-          {data &&
-            data.slice(16).map((item, index) => {
+        <Columns $column={4}>
+          <HeadTitle className="title">Parking lot 2(Exit)</HeadTitle>
+          {parkData &&
+            parkData.slice(16).map((item, index) => {
               return (
                 <div key={index + 16}>
                   <Slot
                     onClick={() => {
-                      handleExistPark2(item, index + 16 + 4);
+                      handleExistParkSecondSlot(item, index + 16 + 4);
                     }}
                   >
                     <Image
@@ -298,7 +260,7 @@ const AutomatedCarParkingStation: React.FC = () => {
                 </div>
               );
             })}
-        </Row>
+        </Columns>
         <MainText>Parking lot 1</MainText>
         <MainText style={{ fontSize: 15 }}>Exit from the Parking Lot</MainText>
         <MainText>Parking lot 2</MainText>
@@ -308,7 +270,7 @@ const AutomatedCarParkingStation: React.FC = () => {
         open={open}
         onClose={(data) => {
           if (data) {
-            handlePark(data);
+            handleParkingSlot(data);
           }
           setOpen(false);
         }}
@@ -317,4 +279,4 @@ const AutomatedCarParkingStation: React.FC = () => {
   );
 };
 
-export default AutomatedCarParkingStation;
+export default AutomatedCarParkingSystems;

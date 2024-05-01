@@ -1,11 +1,7 @@
-import AutomatedCarParkingStation from "./page/AutomateCar";
+import AutomatedCarParkingSystems from "./page/AutomateCar";
 
 function App() {
-  return (
-    <div style={{ padding: 20 }}>
-      <AutomatedCarParkingStation />
-    </div>
-  );
+  return <AutomatedCarParkingSystems />;
 }
 
 export default App;

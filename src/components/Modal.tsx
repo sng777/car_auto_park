@@ -5,6 +5,15 @@ interface ModalProps {
   open: boolean;
 }
 
+export interface MessageProps {
+  header?: string;
+  message?: string;
+}
+
+interface ModalMessageProps extends MessageProps {
+  onClose: () => void;
+}
+
 const Modal = styled.div<ModalProps>`
   display: ${(props) => (props.open ? "block" : "none")};
   position: fixed;
@@ -78,16 +87,21 @@ const ButtonContainer = styled.div`
   column-gap: 10px;
 `;
 
-const ModalComponent: React.FC<{
-  title?: string;
-  message?: string;
-  onClose: () => void;
-}> = ({ title = "Warning", message = "Empty", onClose }) => {
+const ModalComponent: React.FC<ModalMessageProps> = ({
+  header = "Caution",
+  message = "Empty",
+  onClose,
+}) => {
   const [open, setOpen] = useState(true);
   return (
     <Modal open={open}>
-      <ModalContent style={{border: title ==="Warning"? " 5px solid #e9bc0a":"5px solid #99cc33"}}>
-        <TextMain>{title}</TextMain>
+      <ModalContent
+        style={{
+          border:
+          header === "Caution" ? " 5px solid #e9bc0a" : "5px solid #99cc33",
+        }}
+      >
+        <TextMain>{header}</TextMain>
         <div style={{ marginBottom: 20 }} />
         <TextNormal>{message}</TextNormal>
         <div style={{ marginBottom: 40 }} />
@@ -132,8 +146,8 @@ export const ModalForm: React.FC<{
   return (
     <Modal open={open}>
       <ModalContent>
-        <TextMain>Form</TextMain>
-        <p>Template Number Car</p>
+        <TextMain>Welcome</TextMain>
+        <p>Plate Number</p>
         <Input
           type="text"
           ref={inputRef}
@@ -150,7 +164,7 @@ export const ModalForm: React.FC<{
               }
             }}
           >
-            OK
+            Save
           </Button>
           <Button
             className="cancel"
@@ -159,7 +173,7 @@ export const ModalForm: React.FC<{
               setCar(undefined);
             }}
           >
-            Cancel
+            Close
           </Button>
         </ButtonContainer>
       </ModalContent>
