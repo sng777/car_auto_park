@@ -14,14 +14,14 @@ interface Message {
 
 const Component = styled.div`
   display: grid;
-  grid-template-columns: max-content 500px max-content;
+  grid-template-columns: max-content 300px max-content;
   align-items: center;
   justify-content: center;
   justify-items: center;
 `;
 
 const Row = styled.div<{ $row: number }>`
-  width: 500px;
+  width: max-content;
   display: grid;
   grid-template-columns: ${({ $row }) => `repeat(${$row}, 1fr)`};
   gap: 10px;
@@ -45,7 +45,8 @@ const Title = styled(MainText)`
 
 const Slot = styled.div`
   padding: 20px;
-  border: 1px solid;
+  border-width: 8px;
+  border-style: groove double outset double;
   text-align: center;
   cursor: pointer;
 `;
@@ -299,7 +300,7 @@ const AutomatedCarParkingStation: React.FC = () => {
             })}
         </Row>
         <MainText>Parking lot 1</MainText>
-        <MainText>Exit from the Parking Lot</MainText>
+        <MainText style={{ fontSize: 15 }}>Exit from the Parking Lot</MainText>
         <MainText>Parking lot 2</MainText>
       </Component>
 
