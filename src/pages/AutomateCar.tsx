@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ModalComponent, { MessageProps, ModalForm } from "../components/Modal";
-import { CarProps, OnAddingCar, OnInsertCar } from "../utils";
+import ModalMessage, { ModalForm } from "../components/Modal";
+import { OnAddingCar, OnInsertCar } from "../utils";
+import { CarProps, MessageProps } from "../interfaces";
 
-const Component = styled.div`
+const MainComponent = styled.div``;
+
+const ChildComponent = styled.div`
   display: grid;
   grid-template-columns: max-content 300px max-content;
   align-items: center;
@@ -25,16 +28,21 @@ const Columns = styled.div<{ $column: number }>`
   }
 `;
 
-const MainText = styled.p`
+const HeaderText = styled.p`
   font-size: 25px;
   font-weight: 800;
 `;
 
-const HeadTitle = styled(MainText)`
+const HeadTitle = styled(HeaderText)`
   text-align: center;
 `;
 
-const Slot = styled.div`
+const BoldText = styled.p`
+  font-size: 15px;
+  font-weight: 800;
+`;
+
+const ParkSlot = styled.div`
   padding: 20px;
   border-width: 8px;
   border-style: groove double outset double;
@@ -42,27 +50,17 @@ const Slot = styled.div`
   cursor: pointer;
 `;
 
-const Image = styled.img`
+const CarImage = styled.img`
   width: 50px;
   height: 50px;
 `;
 
-const AddComponent = styled.img`
+const AddCar = styled.img`
   width: 30px;
   height: 30px;
   cursor: pointer;
   border: 2px solid #000;
   padding: 20px;
-`;
-
-export const Input = styled.input`
-  border: 1px solid black;
-  border-radius: 50px;
-  padding: 10px;
-  width: 480px;
-  &:focus {
-    outline: none;
-  }
 `;
 
 const AutomatedCarParkingSystems: React.FC = () => {
@@ -76,6 +74,13 @@ const AutomatedCarParkingSystems: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const handleParkingSlot = (no?: string) => {
+    if (!no) {
+      return setMessage({
+        header: "Caution",
+        message: "The car's plate number is a requirement.",
+      });
+    }
+
     const parkingLot1 = parkData.slice(0, 4);
     const parkingLot2 = parkData.slice(16, 20);
     let firstIndex = 1;
@@ -108,11 +113,6 @@ const AutomatedCarParkingSystems: React.FC = () => {
       return setMessage({
         header: "Caution",
         message: "The parking area was filled to fullness.",
-      });
-    } else if (!no) {
-      return setMessage({
-        header: "Caution",
-        message: "The car's plate number is a requirement.",
       });
     }
 
@@ -158,7 +158,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
         return car;
       });
 
-      const length = Math.max(endIndex - index, 1); // Ensure non-negative length
+      const length = Math.max(endIndex - index, 1);
       const arrange = parkSpaceAvailable
         .slice(0, length)
         .concat(newDataParkingSlot.slice(endIndex - 8, index - 4));
@@ -192,7 +192,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
         return car;
       });
 
-      const length = Math.max(index - firstIndex, 1); // Ensure non-negative length
+      const length = Math.max(index - firstIndex, 1);
       const arrange = newDataParkingSlot
         .slice(index - 3, firstIndex + 1)
         .concat(
@@ -208,33 +208,33 @@ const AutomatedCarParkingSystems: React.FC = () => {
   };
 
   return (
-    <div>
+    <MainComponent>
       {message && (
-        <ModalComponent {...message} onClose={() => setMessage(undefined)} />
+        <ModalMessage {...message} onClose={() => setMessage(undefined)} />
       )}
-      <Component>
+      <ChildComponent>
         <Columns $column={4}>
           <HeadTitle className="title">Parking lot 1(Exit)</HeadTitle>
           {parkData &&
             parkData.slice(0, 16).map((item, index) => (
               <div key={index}>
-                <Slot
+                <ParkSlot
                   onClick={() => {
                     handleExistParkFirstSlot(item, index + 4);
                   }}
                 >
-                  <Image
+                  <CarImage
                     src={
                       item?.img ||
                       "https://cdn3.iconfinder.com/data/icons/cosmo-color-navigation/40/parking_2-512.png"
                     }
                   />
                   <p>{item?.name || "Availability"}</p>
-                </Slot>
+                </ParkSlot>
               </div>
             ))}
         </Columns>
-        <AddComponent
+        <AddCar
           src={"https://cdn-icons-png.flaticon.com/512/63/63747.png"}
           onClick={() => setOpen(true)}
         />
@@ -244,38 +244,36 @@ const AutomatedCarParkingSystems: React.FC = () => {
             parkData.slice(16).map((item, index) => {
               return (
                 <div key={index + 16}>
-                  <Slot
+                  <ParkSlot
                     onClick={() => {
                       handleExistParkSecondSlot(item, index + 16 + 4);
                     }}
                   >
-                    <Image
+                    <CarImage
                       src={
                         item?.img ||
                         "https://cdn3.iconfinder.com/data/icons/cosmo-color-navigation/40/parking_2-512.png"
                       }
                     />
                     <p>{item?.name || "Availability"}</p>
-                  </Slot>
+                  </ParkSlot>
                 </div>
               );
             })}
         </Columns>
-        <MainText>Parking lot 1</MainText>
-        <MainText style={{ fontSize: 15 }}>Exit from the Parking Lot</MainText>
-        <MainText>Parking lot 2</MainText>
-      </Component>
+        <HeaderText>Parking lot 1</HeaderText>
+        <BoldText>Exit from the Parking Lot</BoldText>
+        <HeaderText>Parking lot 2</HeaderText>
+      </ChildComponent>
 
       <ModalForm
         open={open}
         onClose={(data) => {
-          if (data) {
-            handleParkingSlot(data);
-          }
+          handleParkingSlot(data);
           setOpen(false);
         }}
       />
-    </div>
+    </MainComponent>
   );
 };
 

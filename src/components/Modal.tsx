@@ -1,18 +1,6 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-
-interface ModalProps {
-  open: boolean;
-}
-
-export interface MessageProps {
-  header?: string;
-  message?: string;
-}
-
-interface ModalMessageProps extends MessageProps {
-  onClose: () => void;
-}
+import { ModalMessageProps, ModalProps } from "../interfaces";
 
 const Modal = styled.div<ModalProps>`
   display: ${(props) => (props.open ? "block" : "none")};
@@ -45,12 +33,6 @@ const TextNormal = styled.p`
   font-size: 20px;
 `;
 
-const ButtonLayout = styled.div`
-  display: flex;
-  column-gap: 10px;
-  justify-content: end;
-`;
-
 const Button = styled.p`
   padding: 10px 30px;
   border: 1px solid black;
@@ -58,6 +40,7 @@ const Button = styled.p`
   cursor: pointer;
   text-align: center;
   width: 45px;
+  font-weight: 500;
   &:hover {
     background: #018cff;
     color: #ffff;
@@ -70,7 +53,7 @@ const Button = styled.p`
   }
 `;
 
-export const Input = styled.input`
+const TextBox = styled.input`
   border: 1px solid black;
   border-radius: 50px;
   padding: 10px;
@@ -87,7 +70,7 @@ const ButtonContainer = styled.div`
   column-gap: 10px;
 `;
 
-const ModalComponent: React.FC<ModalMessageProps> = ({
+const ModalMessage: React.FC<ModalMessageProps> = ({
   header = "Caution",
   message = "Empty",
   onClose,
@@ -98,14 +81,16 @@ const ModalComponent: React.FC<ModalMessageProps> = ({
       <ModalContent
         style={{
           border:
-          header === "Caution" ? " 5px solid #e9bc0a" : "5px solid #99cc33",
+            header === "Caution" ? " 5px solid #e9bc0a" : "5px solid #99cc33",
         }}
       >
-        <TextMain>{header}</TextMain>
+        <TextMain>
+          {header === "Caution" ? `${header} (╥﹏╥)` : `${header} ( • ᴗ - ) ✧`}
+        </TextMain>
         <div style={{ marginBottom: 20 }} />
         <TextNormal>{message}</TextNormal>
         <div style={{ marginBottom: 40 }} />
-        <ButtonLayout>
+        <ButtonContainer>
           <Button
             onClick={() => {
               onClose && onClose();
@@ -114,7 +99,7 @@ const ModalComponent: React.FC<ModalMessageProps> = ({
           >
             OK
           </Button>
-        </ButtonLayout>
+        </ButtonContainer>
       </ModalContent>
     </Modal>
   );
@@ -146,9 +131,9 @@ export const ModalForm: React.FC<{
   return (
     <Modal open={open}>
       <ModalContent>
-        <TextMain>Welcome</TextMain>
-        <p>Plate Number</p>
-        <Input
+        <TextMain>{`Welcome (,,>ヮ<,,)!`}</TextMain>
+        <p style={{ fontWeight: 500 }}>Plate Number</p>
+        <TextBox
           type="text"
           ref={inputRef}
           onKeyDown={handleKeyDown}
@@ -158,10 +143,8 @@ export const ModalForm: React.FC<{
         <ButtonContainer>
           <Button
             onClick={() => {
-              if (car) {
-                onClose && onClose(car);
-                setCar(undefined);
-              }
+              onClose && onClose(car);
+              setCar(undefined);
             }}
           >
             Save
@@ -181,4 +164,4 @@ export const ModalForm: React.FC<{
   );
 };
 
-export default ModalComponent;
+export default ModalMessage;

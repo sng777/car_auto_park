@@ -1,7 +1,4 @@
-export interface CarProps {
-    name?: string;
-    img?: string;
-  }
+import { CarProps } from "../interfaces";
 
 export const OnAddingCar = (
   oldData: CarProps[],
@@ -12,14 +9,14 @@ export const OnAddingCar = (
 ) => {
   const result = fristPark
     ? [
-        ...oldData.slice(startIndex, index), // part of the array before the specified index
-        ...newItem.map((item) => item), // increment the values of the inserted items
+        ...oldData.slice(startIndex, index),
+        ...newItem.map((item) => item),
         ...oldData.slice(index),
       ]
     : [
         ...oldData.slice(0, startIndex),
-        ...newItem.map((item) => item), // increment the values of the inserted items
-        ...oldData.slice(startIndex, index - 1), // part of the array before the specified index
+        ...newItem.map((item) => item),
+        ...oldData.slice(startIndex, index - 1),
         ...oldData.slice(index, oldData.length),
       ];
   return result;
@@ -32,9 +29,7 @@ export const OnInsertCar = (
 ) => {
   return [
     ...oldData.slice(0, index),
-    // inserted items
     ...newItem,
-    // part of the array after the specified index (excluding the replaced item)
     ...oldData.slice(index + newItem?.length),
   ];
 };
