@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { ModalMessageProps, ModalProps } from "../interfaces";
+import { ModalFormProps, ModalMessageProps, ModalProps } from "../interfaces";
 
 const Modal = styled.div<ModalProps>`
   display: ${(props) => (props.open ? "block" : "none")};
@@ -46,7 +46,7 @@ const Button = styled.p`
     color: #ffff;
     border: 1px solid #ffff;
   }
-  &.cancel:hover {
+  &.close:hover {
     background: #ff0101;
     color: #ffff;
     border: 1px solid #ffff;
@@ -105,10 +105,11 @@ const ModalMessage: React.FC<ModalMessageProps> = ({
   );
 };
 
-export const ModalForm: React.FC<{
-  open: boolean;
-  onClose: (data?: string) => void;
-}> = ({ open = false, onClose }) => {
+export const ModalForm: React.FC<ModalFormProps> = ({
+  open = false,
+  onSave,
+  onClose,
+}) => {
   const [car, setCar] = useState<string | undefined>();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -123,7 +124,7 @@ export const ModalForm: React.FC<{
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.keyCode === 13) {
       // Handle Enter key press here
-      onClose && onClose(e.currentTarget.value);
+      onSave && onSave(e.currentTarget.value);
       setCar(undefined);
     }
   };
@@ -143,14 +144,14 @@ export const ModalForm: React.FC<{
         <ButtonContainer>
           <Button
             onClick={() => {
-              onClose && onClose(car);
+              onSave && onSave(car);
               setCar(undefined);
             }}
           >
             Save
           </Button>
           <Button
-            className="cancel"
+            className="close"
             onClick={() => {
               onClose && onClose();
               setCar(undefined);

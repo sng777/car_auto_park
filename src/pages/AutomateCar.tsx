@@ -268,8 +268,11 @@ const AutomatedCarParkingSystems: React.FC = () => {
 
       <ModalForm
         open={open}
-        onClose={(data) => {
+        onSave={(data) => {
           handleParkingSlot(data);
+          setOpen(false);
+        }}
+        onClose={()=>{
           setOpen(false);
         }}
       />

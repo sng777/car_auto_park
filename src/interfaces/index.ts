@@ -15,3 +15,8 @@ export interface MessageProps {
   header?: string;
   message?: string;
 }
+
+export interface ModalFormProps extends ModalProps {
+  onSave: (data?: string) => void;
+  onClose: () => void;
+}
