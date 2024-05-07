@@ -117,9 +117,9 @@ export const ModalForm: React.FC<ModalFormProps> = ({
     if (inputRef.current) {
       setCar(undefined);
       inputRef.current.focus();
-      inputRef.current.value = ""; // Clear the input value using the ref
+      inputRef.current.value = "";
     }
-  }, [open]); // Run this effect when the `open` prop changes
+  }, [open]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.keyCode === 13) {

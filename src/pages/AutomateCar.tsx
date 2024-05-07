@@ -21,8 +21,7 @@ const Columns = styled.div<{ $column: number }>`
   gap: 10px;
 
   & > .title {
-    /* Target the 1st and 5th elements */
-    grid-column: span 4; /* Apply grid-column: span 4 */
+    grid-column: span 4;
     text-align: center;
     gap: 10px;
   }
