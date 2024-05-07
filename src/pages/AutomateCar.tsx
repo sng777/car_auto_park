@@ -71,7 +71,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
 
   const [parkData, setParkData] = useState(parkSpaceAvailable || []);
   const [message, setMessage] = useState<MessageProps | undefined>();
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleParkingSlot = (no?: string) => {
     if (!no) {
@@ -236,7 +236,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
         </Columns>
         <AddCar
           src={"https://cdn-icons-png.flaticon.com/512/63/63747.png"}
-          onClick={() => setOpen(true)}
+          onClick={() => setOpenModal(true)}
         />
         <Columns $column={4}>
           <HeadTitle className="title">Parking lot 2(Exit)</HeadTitle>
@@ -267,13 +267,13 @@ const AutomatedCarParkingSystems: React.FC = () => {
       </ChildComponent>
 
       <ModalForm
-        open={open}
+        open={openModal}
         onSave={(data) => {
           handleParkingSlot(data);
-          setOpen(false);
+          setOpenModal(false);
         }}
         onClose={()=>{
-          setOpen(false);
+          setOpenModal(false);
         }}
       />
     </MainComponent>
