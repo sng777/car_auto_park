@@ -12,6 +12,27 @@ const ChildComponent = styled.div`
   align-items: center;
   justify-content: center;
   justify-items: center;
+  @media (max-width: 1400px) {
+    grid-template-columns: 1fr;
+    .parkexist1 {
+      grid-row: 2;
+    }
+    .parkAdd {
+      grid-row: 1;
+    }
+    .parkExist2 {
+      grid-row: 4;
+    }
+    .park1 {
+      grid-row: 3;
+    }
+    .parkExist {
+      grid-row: 6;
+    }
+    .park2 {
+      grid-row: 5;
+    }
+  }
 `;
 
 const Columns = styled.div<{ $column: number }>`
@@ -212,7 +233,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
         <ModalMessage {...message} onClose={() => setMessage(undefined)} />
       )}
       <ChildComponent>
-        <Columns $column={4}>
+        <Columns $column={4} className="parkExist1">
           <HeadTitle className="title">Parking lot 1(Exit)</HeadTitle>
           {parkData &&
             parkData.slice(0, 16).map((item, index) => (
@@ -233,11 +254,11 @@ const AutomatedCarParkingSystems: React.FC = () => {
               </div>
             ))}
         </Columns>
-        <AddCar
+        <AddCar className="parkAdd"
           src={"https://cdn-icons-png.flaticon.com/512/63/63747.png"}
           onClick={() => setOpenModal(true)}
         />
-        <Columns $column={4}>
+        <Columns $column={4} className="parkExist2">
           <HeadTitle className="title">Parking lot 2(Exit)</HeadTitle>
           {parkData &&
             parkData.slice(16).map((item, index) => {
@@ -260,9 +281,9 @@ const AutomatedCarParkingSystems: React.FC = () => {
               );
             })}
         </Columns>
-        <HeaderText>Parking lot 1</HeaderText>
-        <BoldText>Exit from the Parking Lot</BoldText>
-        <HeaderText>Parking lot 2</HeaderText>
+        <HeaderText className="park1">Parking lot 1</HeaderText>
+        <BoldText className="parkExist">Exit from the Parking Lot</BoldText>
+        <HeaderText className="park2">Parking lot 2</HeaderText>
       </ChildComponent>
 
       <ModalForm
