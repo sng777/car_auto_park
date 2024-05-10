@@ -93,8 +93,8 @@ const AutomatedCarParkingSystems: React.FC = () => {
   const [message, setMessage] = useState<MessageProps | undefined>();
   const [openModal, setOpenModal] = useState(false);
 
-  const handleParkingSlot = (no?: string) => {
-    if (!no) {
+  const handleParkingSlot = (number?: string) => {
+    if (!number) {
       return setMessage({
         header: "Caution",
         message: "The car's plate number is a requirement.",
@@ -138,7 +138,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
 
     const newData: CarProps[] = [
       {
-        name: no,
+        name: number,
         img: "https://icones.pro/wp-content/uploads/2021/03/icone-de-voiture-symbole-png-orange.png",
       },
     ];
@@ -254,7 +254,8 @@ const AutomatedCarParkingSystems: React.FC = () => {
               </div>
             ))}
         </Columns>
-        <AddCar className="parkAdd"
+        <AddCar
+          className="parkAdd"
           src={"https://cdn-icons-png.flaticon.com/512/63/63747.png"}
           onClick={() => setOpenModal(true)}
         />
@@ -292,7 +293,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
           handleParkingSlot(data);
           setOpenModal(false);
         }}
-        onClose={()=>{
+        onClose={() => {
           setOpenModal(false);
         }}
       />

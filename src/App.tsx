@@ -1,4 +1,4 @@
-import AutomatedCarParkingSystems from "./pages/AutomateCar";
+import AutomatedCarParkingSystems from "./pages/ParkCar";
 
 function App() {
   return <AutomatedCarParkingSystems />;
