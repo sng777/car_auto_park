@@ -249,7 +249,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
                       "https://cdn3.iconfinder.com/data/icons/cosmo-color-navigation/40/parking_2-512.png"
                     }
                   />
-                  <p>{item?.name || "Availability"}</p>
+                  <p>{item?.name || "Available"}</p>
                 </ParkSlot>
               </div>
             ))}
@@ -276,7 +276,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
                         "https://cdn3.iconfinder.com/data/icons/cosmo-color-navigation/40/parking_2-512.png"
                       }
                     />
-                    <p>{item?.name || "Availability"}</p>
+                    <p>{item?.name || "Available"}</p>
                   </ParkSlot>
                 </div>
               );
