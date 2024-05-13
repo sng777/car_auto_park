@@ -14,19 +14,19 @@ const ChildComponent = styled.div`
   justify-items: center;
   @media (max-width: 1400px) {
     grid-template-columns: 1fr;
-    .parkexist1 {
+    .parkExit1 {
       grid-row: 2;
     }
     .parkAdd {
       grid-row: 1;
     }
-    .parkExist2 {
+    .parkExit2 {
       grid-row: 4;
     }
     .park1 {
       grid-row: 3;
     }
-    .parkExist {
+    .parkExit {
       grid-row: 6;
     }
     .park2 {
@@ -154,7 +154,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
     });
   };
 
-  const handleExistParkFirstSlot = (item?: CarProps, index?: number) => {
+  const handleExitParkFirstSlot = (item?: CarProps, index?: number) => {
     if (!item?.name || index === undefined) {
       return setMessage({
         header: "Caution",
@@ -190,7 +190,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
     }
   };
 
-  const handleExistParkSecondSlot = (item?: CarProps, index?: number) => {
+  const handleExitParkSecondSlot = (item?: CarProps, index?: number) => {
     if (!item?.name || index === undefined) {
       return setMessage({
         header: "Caution",
@@ -233,14 +233,14 @@ const AutomatedCarParkingSystems: React.FC = () => {
         <ModalMessage {...message} onClose={() => setMessage(undefined)} />
       )}
       <ChildComponent>
-        <Columns $column={4} className="parkExist1">
+        <Columns $column={4} className="parkExit1">
           <HeadTitle className="title">Parking lot 1(Exit)</HeadTitle>
           {parkData &&
             parkData.slice(0, 16).map((item, index) => (
               <div key={index}>
                 <ParkSlot
                   onClick={() => {
-                    handleExistParkFirstSlot(item, index + 4);
+                    handleExitParkFirstSlot(item, index + 4);
                   }}
                 >
                   <CarImage
@@ -259,7 +259,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
           src={"https://cdn-icons-png.flaticon.com/512/63/63747.png"}
           onClick={() => setOpenModal(true)}
         />
-        <Columns $column={4} className="parkExist2">
+        <Columns $column={4} className="parkExit2">
           <HeadTitle className="title">Parking lot 2(Exit)</HeadTitle>
           {parkData &&
             parkData.slice(16).map((item, index) => {
@@ -267,7 +267,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
                 <div key={index + 16}>
                   <ParkSlot
                     onClick={() => {
-                      handleExistParkSecondSlot(item, index + 16 + 4);
+                      handleExitParkSecondSlot(item, index + 16 + 4);
                     }}
                   >
                     <CarImage
@@ -283,7 +283,7 @@ const AutomatedCarParkingSystems: React.FC = () => {
             })}
         </Columns>
         <HeaderText className="park1">Parking lot 1</HeaderText>
-        <BoldText className="parkExist">Exit from the Parking Lot</BoldText>
+        <BoldText className="parkExit">Exit from the Parking Lot</BoldText>
         <HeaderText className="park2">Parking lot 2</HeaderText>
       </ChildComponent>
 
