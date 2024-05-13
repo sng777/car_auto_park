@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/car_parking_systems/static/css/main.e6c13ad2.css",
-    "main.js": "/car_parking_systems/static/js/main.1dda20cc.js",
+    "main.js": "/car_parking_systems/static/js/main.db704678.js",
     "index.html": "/car_parking_systems/index.html",
     "main.e6c13ad2.css.map": "/car_parking_systems/static/css/main.e6c13ad2.css.map",
-    "main.1dda20cc.js.map": "/car_parking_systems/static/js/main.1dda20cc.js.map"
+    "main.db704678.js.map": "/car_parking_systems/static/js/main.db704678.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.1dda20cc.js"
+    "static/js/main.db704678.js"
   ]
 }
